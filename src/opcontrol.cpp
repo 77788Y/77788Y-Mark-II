@@ -3,7 +3,6 @@
 void opcontrol() {
   while(true) {
 
-
     pros::delay(10);
   }
 }
