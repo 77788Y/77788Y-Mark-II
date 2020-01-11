@@ -12,10 +12,12 @@
  * \tparam T
  *         An enum describing all behaviors of a machine
  */
-template <typename T>
+template <class T>
 class AbstractBehavior {
 
 public:
+
+  AbstractBehavior(T identifier);
 
   virtual ~AbstractBehavior();
 
