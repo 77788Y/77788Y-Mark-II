@@ -28,7 +28,7 @@ public:
    * \param val
    *        The desired voltage
    */
-  virtual void move_voltage(int val);
+  virtual void move_voltage(int val) = 0;
 
 
   /**
@@ -37,7 +37,15 @@ public:
    * 
    * \return the current pose of the subsystem
    */
-  virtual TPose get_pose();
+  virtual TPose get_pose() = 0;
+
+
+  /**
+   * Tare the subsystem's pose to a new pose.
+   * 
+   * \param new_pos The pose at which the subsystem will be
+   */
+  virtual void tare_pose(TPose new_pose) = 0;
 
 
   /**
@@ -46,6 +54,38 @@ public:
    * 
    * \return the current pose of the subsystem
    */
-  virtual TDeriv get_deriv();
+  virtual TDeriv get_deriv() = 0;
+
+  /**
+   * Update the chassis controller's pose calculation.
+   * Should always be run before acting on the subsystem.
+   */
+  virtual void update_pose() = 0;
+
+private:
+
+  /**
+   * The reference pose of the subsystem.
+   * Acts as the "zero-point" from which the visible pose is calculated.
+   */
+  TPose m_reference_pose;
+
+  /**
+   * The absolute pose of the subsystem.
+   * Does NOT account for m_reference_pose, but is relative to the creation of the subsystem.
+   */
+  TPose m_absolute_pose;
+
+  /**
+   * The current pose of the subystem.
+   * Relative to m_reference_pose.
+   */
+  TPose m_pose;
+
+  /**
+   * The current derivative of the pose of the subsystem.
+   * Taring does not affect this value.
+   */
+  TDeriv m_deriv;
 
 };
