@@ -23,8 +23,8 @@ namespace transmission {
     WAITING_FOR_UNLOCK, ///< fully retracted and locked but desiring to be extended (PASSIVE behavior)
     WAITING_FOR_LOCK,   ///< fully retracted but not locked (HOLDING behavior)
     RETRACTING,         ///< retracting (RETRACTING behavior)
-    DEPOSITING_FAST,    ///< first stage of deposit, at full speed (EXTENDING_FAST behavior)
-    DEPOSITING_DECEL,   ///< second stage of deposit, decelerating to avoid flinging cubes (EXTENDING_SLOW behavior)
+    DEPOSITING_FAST,    ///< first stage of deposit, at full speed (DEPOSITING_FAST behavior)
+    DEPOSITING_DECEL,   ///< second stage of deposit, decelerating to avoid flinging cubes (DEPOSITING_SLOW behavior)
     DEPOSITED           ///< fully deposited but still extended (HOLDING behavior)
   };
 
