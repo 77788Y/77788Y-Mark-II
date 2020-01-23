@@ -1,13 +1,22 @@
-#include "subsystems/subsystem.hpp"
+#pragma once
+
 #include "lib/odom.hpp"
 #include "subsystems/transmission.hpp"
 
 
-class Tilter: private AbstractSubsystem<QAngle, QAngularSpeed> {
+class Tilter {
 
   friend class Transmission;
 
 public:
+
+  ~Tilter() = default;
+
+  /**
+   * Constructor.
+   */
+  Tilter(std::unique_ptr<Transmission> transmission);
+
   /**
    * Set the voltage of both motors.
    * Will switch the transmission to LOCKED_PASSTHROUGH state.
@@ -64,6 +73,11 @@ public:
   void update_pose();
 
 private:
+
+  /**
+   * The Transmission that this Tilter object interacts with.
+   */
+  std::unique_ptr<Transmission> m_transmission;
 
   /**
    * The reference pose.

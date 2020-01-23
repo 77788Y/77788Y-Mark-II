@@ -1,5 +1,7 @@
-#include "subsystems/subsystem.hpp"
+#pragma once
 
+#include "main.h"
+#include <memory>
 
 /**
  * The controller of the transmission.
@@ -23,17 +25,17 @@ class Transmission {
    *        The left motor shared between the chassis and the tilter
    * \param mtr_shared_right
    */
-  Transmission(pros::Motor mtr_direct_left, pros::Motor mtr_direct_right, pros::Motor mtr_shared_left, pros::Motor mtr_shared_right);
+  Transmission(std::unique_ptr<Motor> mtr_direct_left, std::unique_ptr<Motor> mtr_direct_right, std::unique_ptr<Motor> mtr_shared_left, std::unique_ptr<Motor> mtr_shared_right);
 
 private:
 
   /**
    * Motors associated with the transmission.
    */
-  pros::Motor m_motor_left_direct;  ///< The direct motor on the left of the chassis
-  pros::Motor m_motor_right_direct; ///< The direct motor on the right of the chassis
-  pros::Motor m_motor_left_shared;  ///< The shared motor on the left of the chassis
-  pros::Motor m_motor_right_shared; ///< The shared motor on the right of the chassis
+  std::unique_ptr<Motor> m_motor_left_direct;  ///< The direct motor on the left of the chassis
+  std::unique_ptr<Motor> m_motor_right_direct; ///< The direct motor on the right of the chassis
+  std::unique_ptr<Motor> m_motor_left_shared;  ///< The shared motor on the left of the chassis
+  std::unique_ptr<Motor> m_motor_right_shared; ///< The shared motor on the right of the chassis
 
   /**
    * Describe a way for the transmission to reconcile the chassis and tilter.

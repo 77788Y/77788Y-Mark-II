@@ -1,4 +1,5 @@
-#include "subsystems/subsystem.hpp"
+#pragma once
+
 #include "lib/odom.hpp"
 #include "subsystems/transmission.hpp"
 
@@ -7,19 +8,16 @@
  * The interface of the chassis.
  * Interfaces with the state machine in a Transmission object.
  */
-class Chassis: private AbstractSubsystem<Odom::ChassisPose, Odom::ChassisDeriv> {
+class Chassis {
 
   friend class Transmission;
 
 public:
 
-  
-  Chassis();
-
   /**
    * Constructor.
    */
-  Chassis(Transmission* transmission, Odom* odom);
+  Chassis(std::unique_ptr<Transmission> transmission, std::unique_ptr<Odom> odom);
 
   /**
    * Set the chassis motors to specified voltages.
@@ -48,7 +46,13 @@ public:
    * 
    * \return The pose of the chassis
    */
-  Odom::ChassisPose get_pose();
+  Odom::ChassisPose* get_pose();
+
+  /**
+   * Get the current pose derivative.
+   * This is the speed of translation, rotation, etc.
+   */
+  Odom::ChassisDeriv* get_speed();
 
   /**
    * Tare the chassis' pose to a new pose.
@@ -56,13 +60,7 @@ public:
    * \param new_pose
    *        The pose at which the chassis will now be
    */
-  void tare_pose(Odom::ChassisPose new_pose);
-
-  /**
-   * Get the current pose derivative.
-   * This is the speed of translation, rotation, etc.
-   */
-  Odom::ChassisDeriv get_deriv();
+  void tare_pose(Odom::ChassisPose* new_pose);
 
   /**
    * Update the chassis interface's pose calculation.
@@ -77,10 +75,10 @@ private:
   /**
    * A reference to the Transmission this Chassis controls.
    */
-  Transmission* transmission;
+  std::unique_ptr<Transmission> m_transmission;
 
   /**
    * A reference to the Odom that controls this Chassis' pose.
    */
-  Odom* odom;
+  std::unique_ptr<Odom> m_odom;
 };

@@ -130,48 +130,84 @@ class Odom {
    *        The radius of the tracking wheels
    */
   Odom(
-    std::shared_ptr<ContinuousRotarySensor> enc_left,
-    std::shared_ptr<ContinuousRotarySensor> enc_right,
-    std::shared_ptr<ContinuousRotarySensor> enc_side,
-    std::shared_ptr<ContinuousRotarySensor> enc_left_backup,
-    std::shared_ptr<ContinuousRotarySensor> enc_right_backup,
-    QLength track_width, QLength side_dist, QLength wheel_radius = 1.375_in
+    std::unique_ptr<ContinuousRotarySensor> enc_left,
+    std::unique_ptr<ContinuousRotarySensor> enc_right,
+    std::unique_ptr<ContinuousRotarySensor> enc_side,
+    std::unique_ptr<ContinuousRotarySensor> enc_left_backup = nullptr,
+    std::unique_ptr<ContinuousRotarySensor> enc_right_backup = nullptr,
+    std::unique_ptr<pros::Imu> imu = nullptr,
+    QLength track_width = 16_in, QLength side_dist = 0_in, QLength wheel_radius = 1.375_in
   );
+
+  /**
+   * Update the odom calculations.
+   * Shoul be run frequently; a 10ms interval is recommended.
+   */
+  void update();
+
+  /**
+   * Get the current pose of the robot.
+   * Should be run after update() to ensure up-to-date calculations.
+   * 
+   * \return The current pose of the bot
+   */
+  ChassisPose* get_pose();
+
+  /**
+   * Get the rate of change of the current pose of the robot.
+   * Should be run after update() to ensure up-to-date calculations.
+   * 
+   * \return The rate of change of the current pose of the bot
+   */
+  ChassisDeriv* get_speed();
+
+  /**
+   * Tare the pose so that the current pose reads as the value provided.
+   * 
+   * \param new_pose
+   *        The pose that the current pose will be tared to
+   */
+  void tare(ChassisPose* new_pose);
 
   private:
 
   /**
    * The encoders used to calculate pose.
    */
-  std::shared_ptr<ContinuousRotarySensor> m_enc_left;
-  std::shared_ptr<ContinuousRotarySensor> m_enc_right;
-  std::shared_ptr<ContinuousRotarySensor> m_enc_side;
-  std::shared_ptr<ContinuousRotarySensor> m_enc_left_backup;
-  std::shared_ptr<ContinuousRotarySensor> m_enc_right_backup;
+  std::unique_ptr<ContinuousRotarySensor> m_enc_left;
+  std::unique_ptr<ContinuousRotarySensor> m_enc_right;
+  std::unique_ptr<ContinuousRotarySensor> m_enc_side;
+  std::unique_ptr<ContinuousRotarySensor> m_enc_left_backup;
+  std::unique_ptr<ContinuousRotarySensor> m_enc_right_backup;
+
+  /**
+   * An IMU used to supplement the encoders for theta calculation.
+   */
+    std::unique_ptr<pros::Imu> m_imu;
 
   /**
    * The reference pose of the chassis.
    * Acts as the "zero-point" from which the visible pose is calculated.
    */
-  ChassisPose m_reference_pose;
+  std::unique_ptr<ChassisPose> m_reference_pose;
 
   /**
    * The absolute pose of the chassis.
    * Does NOT account for m_reference_pose, but is relative to the creation of the subsystem.
    */
-  ChassisPose m_absolute_pose;
+  std::unique_ptr<ChassisPose> m_absolute_pose;
 
   /**
    * The current pose of the chassis.
    * Relative to m_reference_pose.
    */
-  ChassisPose m_pose;
+  std::unique_ptr<ChassisPose> m_pose;
 
   /**
    * The current derivative of the pose of the chassis.
    * Taring does not affect this value.
    */
-  ChassisDeriv m_deriv;
+  std::unique_ptr<ChassisDeriv> m_deriv;
 
   /**
    * Physical characteristics.
