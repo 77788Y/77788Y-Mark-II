@@ -3,6 +3,9 @@
 #include "main.h"
 #include <memory>
 
+class Chassis;
+class Tilter;
+
 /**
  * The controller of the transmission.
  * Manages the transmission's state machine and motors.
@@ -14,6 +17,15 @@ class Transmission {
   friend class Tilter;
 
   public:
+
+
+  /**
+   * Globals.
+   */
+  static constexpr QAngle TILTER_RETRACT_THRESHOLD = 5_deg; ///< Tilter is considered retracted when behind this value.
+  static constexpr QAngle TILTER_EXTEND_THRESHOLD = 5_deg;  ///< Tilter is considered extended when in front of this value.
+  static constexpr double TILTER_HOLD_STRENGTH = 4000;      ///< This is the maximum voltage that will be applied to correct the tilter.
+
   /**
    * Constructor.
    * 
@@ -25,9 +37,15 @@ class Transmission {
    *        The left motor shared between the chassis and the tilter
    * \param mtr_shared_right
    */
-  Transmission(std::unique_ptr<Motor> mtr_direct_left, std::unique_ptr<Motor> mtr_direct_right, std::unique_ptr<Motor> mtr_shared_left, std::unique_ptr<Motor> mtr_shared_right);
+  Transmission(int8_t motor_left_direct, int8_t motor_right_direct, int8_t motor_left_shared, int8_t motor_right_shared);
 
 private:
+
+  /**
+   * Chassis and Tilter objects associated with this Transmission.
+   */
+  const std::shared_ptr<Chassis> m_chassis;
+  const std::shared_ptr<Tilter> m_tilter;
 
   /**
    * Motors associated with the transmission.
@@ -59,7 +77,7 @@ private:
   /***
    * The current state of the transmission.
    */
-  State state;
+  State m_state;
 
   /**
    * The desired voltages of the chassis.
@@ -79,13 +97,16 @@ private:
    * \param state
    *        The desired state
    */
-  void set_state(State);
+  void set_state(State state);
+
+  /**
+   * PID controller.
+   * Used to hold tilter in place when in HOLD state.
+   */
+  IterativePosPIDController m_hold_controller;
 
   /**
    * Update the internal controller and state manager.
-   * 
-   * \param dt
-   *        The time that has passed since the last update
    */
-  void update(QTime dt);
+  void update();
 };

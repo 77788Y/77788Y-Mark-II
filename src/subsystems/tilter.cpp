@@ -7,16 +7,16 @@ Tilter::Tilter(std::unique_ptr<Transmission> transmission):
 
 // move voltage
 void Tilter::move_voltage(int val) {
-  m_transmission->state = Transmission::State::LOCKED_PASSTHROUGH;
+  m_transmission->m_state = Transmission::State::LOCKED_PASSTHROUGH;
   m_transmission->m_desired_tilter_voltage = val;
 }
 
 // extend/retract tray
 void Tilter::extend_passive() {
-  m_transmission->state = Transmission::State::EXTENDING;
+  m_transmission->m_state = Transmission::State::EXTENDING;
 }
 void Tilter::retract_passive() {
-  m_transmission->state = Transmission::State::RETRACTING;
+  m_transmission->m_state = Transmission::State::RETRACTING;
 }
 
 // get pose
