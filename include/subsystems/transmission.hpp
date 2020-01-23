@@ -32,10 +32,18 @@ private:
   /**
    * Motors associated with the transmission.
    */
-  std::unique_ptr<Motor> m_motor_left_direct;  ///< The direct motor on the left of the chassis
-  std::unique_ptr<Motor> m_motor_right_direct; ///< The direct motor on the right of the chassis
-  std::unique_ptr<Motor> m_motor_left_shared;  ///< The shared motor on the left of the chassis
-  std::unique_ptr<Motor> m_motor_right_shared; ///< The shared motor on the right of the chassis
+  const std::unique_ptr<Motor> m_motor_left_direct;  ///< The direct motor on the left of the chassis
+  const std::unique_ptr<Motor> m_motor_right_direct; ///< The direct motor on the right of the chassis
+  const std::unique_ptr<Motor> m_motor_left_shared;  ///< The shared motor on the left of the chassis
+  const std::unique_ptr<Motor> m_motor_right_shared; ///< The shared motor on the right of the chassis
+
+  /**
+   * IMEs associated with each motor.
+   */
+  std::shared_ptr<IntegratedEncoder> m_ime_left_direct;
+  std::shared_ptr<IntegratedEncoder> m_ime_right_direct;
+  std::shared_ptr<IntegratedEncoder> m_ime_left_shared;
+  std::shared_ptr<IntegratedEncoder> m_ime_right_shared;
 
   /**
    * Describe a way for the transmission to reconcile the chassis and tilter.

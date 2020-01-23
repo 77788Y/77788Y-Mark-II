@@ -133,8 +133,8 @@ class Odom {
     std::unique_ptr<ContinuousRotarySensor> enc_left,
     std::unique_ptr<ContinuousRotarySensor> enc_right,
     std::unique_ptr<ContinuousRotarySensor> enc_side,
-    std::unique_ptr<ContinuousRotarySensor> enc_left_backup = nullptr,
-    std::unique_ptr<ContinuousRotarySensor> enc_right_backup = nullptr,
+    std::shared_ptr<ContinuousRotarySensor> enc_left_backup = nullptr,
+    std::shared_ptr<ContinuousRotarySensor> enc_right_backup = nullptr,
     std::unique_ptr<pros::Imu> imu = nullptr,
     QLength track_width = 16_in, QLength side_dist = 0_in, QLength wheel_radius = 1.375_in
   );

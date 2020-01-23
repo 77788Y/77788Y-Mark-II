@@ -10,8 +10,6 @@ class Tilter {
 
 public:
 
-  ~Tilter() = default;
-
   /**
    * Constructor.
    */
@@ -40,15 +38,34 @@ public:
    * This is passive and will only happen when the chassis allows.
    * State will be set to RETRACTING.
    */
-  void retract_tray();
+  void retract_passive();
 
 
   /**
    * Get the angle of the tilter's control arm.
+   * Should be run after update_pose() for up-to-date values.
    * 
    * \return the current angle of the tilter's control arm.
    */
   QAngle get_pose();
+
+
+  /**
+   * Get the angular velocity of the control arm.
+   * Should be run after update_pose() for up-to-date values.
+   * 
+   * \return the current angular velocity of the control arm
+   */
+  QAngularSpeed get_velocity();
+
+
+  /**
+   * Get the angular acceleration of the control arm.
+   * Should be run after update_pose() for up-to-date values.
+   * 
+   * \return the current angular acceleration of the control arm
+   */
+  QAngularAcceleration get_acceleration();
 
 
   /**
@@ -57,14 +74,6 @@ public:
    * \param new_pos The angle at which the control arm will be
    */
   void tare_pose(QAngle new_pose);
-
-
-  /**
-   * Get the angular velocity of the control arm.
-   * 
-   * \return the current angular velocity of the control arm
-   */
-  QAngularSpeed get_deriv();
 
   /**
    * Update the pose calculation.
@@ -98,9 +107,9 @@ private:
   QAngle m_pose;
 
   /**
-   * The current derivative of the pose of the tilter.
-   * Taring does not affect this value.
+   * A VelMath object.
+   * Used to calculate velocity and acceleration of tilter.
    */
-  QAngularSpeed m_deriv;
+  VelMath velmath;
 
 };
