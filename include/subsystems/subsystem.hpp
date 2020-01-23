@@ -57,7 +57,7 @@ public:
   virtual TDeriv get_deriv() = 0;
 
   /**
-   * Update the chassis controller's pose calculation.
+   * Update the controller's pose calculation.
    * Should always be run before acting on the subsystem.
    */
   virtual void update_pose() = 0;

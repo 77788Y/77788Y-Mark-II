@@ -1,3 +1,5 @@
+#if FALSE
+
 #include <memory>
 #include <functional>
 #include <vector>
@@ -32,7 +34,7 @@ public:
    * Should be run at a steady frequency.
    * 50ms intervals or shorter are suggested.
    */
-  virtual void update();
+  virtual void update() = 0;
 };
 
 
@@ -192,3 +194,4 @@ private:
    */
   TState m_desired_state;
 };
+#endif
