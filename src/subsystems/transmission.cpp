@@ -56,15 +56,15 @@ void Transmission::set_state(State state) {
 void Transmission::update() {
 
   // update state
-  if (m_state == State::RETRACTING && m_tilter->get_pose() <= TILTER_RETRACT_THRESHOLD) {
+  if (m_state == State::RETRACTING && m_tilter->get_angle() <= TILTER_RETRACT_THRESHOLD) {
     m_state = State::HOLDING;
     m_hold_controller.setTarget(0);
   }
-  if (m_state == State::EXTENDING  && m_tilter->get_pose() >= TILTER_RETRACT_THRESHOLD) {
+  if (m_state == State::EXTENDING  && m_tilter->get_angle() >= TILTER_RETRACT_THRESHOLD) {
     m_state = State::HOLDING;
     m_hold_controller.setTarget(TILTER_RETRACT_THRESHOLD.convert(degree));
   }
-  if (m_state == State::HOLDING && m_tilter->get_pose() <= TILTER_RETRACT_THRESHOLD /*&& lift check*/) m_state = State::PASSIVE;
+  if (m_state == State::HOLDING && m_tilter->get_angle() <= TILTER_RETRACT_THRESHOLD /*&& lift check*/) m_state = State::PASSIVE;
 
   // update motors
   switch (m_state) {
@@ -106,7 +106,7 @@ void Transmission::update() {
       break;
 
     case (State::HOLDING): {
-      double correct = m_hold_controller.step(m_tilter->get_pose().convert(degree));
+      double correct = m_hold_controller.step(m_tilter->get_angle().convert(degree));
       int shared_voltage_left =  m_desired_chassis_voltage_left  - correct * TILTER_HOLD_STRENGTH;
       int shared_voltage_right = m_desired_chassis_voltage_right + correct * TILTER_HOLD_STRENGTH;
 

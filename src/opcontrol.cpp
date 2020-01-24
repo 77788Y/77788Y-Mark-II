@@ -20,10 +20,15 @@ void opcontrol() {
 
       // control tilter
       if (controls::btn_tilter_extend.isPressed())  tilter->extend_passive();
-      if (controls::btn_tilter_retract.isPressed()) tilter->retract_passive();
+      else if (controls::btn_tilter_retract.isPressed()) tilter->retract_passive();
 
       transmission->m_control_mutex.give();
     }
+
+    // control intake
+    if (controls::btn_intake_in.isPressed())  intake->move_voltage(12000);
+    else if (controls::btn_intake_out.isPressed()) intake->move_voltage(-12000);
+    else intake->lock();
 
 
     pros::delay(10);

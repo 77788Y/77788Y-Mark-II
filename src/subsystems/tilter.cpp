@@ -22,7 +22,7 @@ void Tilter::retract_passive() {
 }
 
 // get pose
-QAngle Tilter::get_pose() {
+QAngle Tilter::get_angle() {
   return m_pose;
 }
 QAngularSpeed Tilter::get_velocity() {
@@ -33,13 +33,13 @@ QAngularAcceleration Tilter::get_acceleration() {
 }
 
 // tare pose
-void Tilter::tare_pose(QAngle new_pose) {
+void Tilter::tare_angle(QAngle new_pose) {
   m_reference_pose = new_pose - m_absolute_pose;
-  update_pose();
+  update_angle();
 }
 
 // update pose
-void Tilter::update_pose() {
+void Tilter::update_angle() {
 
   // calculate new absolute pose
   m_absolute_pose = (

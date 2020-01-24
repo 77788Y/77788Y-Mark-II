@@ -47,7 +47,7 @@ public:
    * 
    * \return the current angle of the tilter's control arm.
    */
-  QAngle get_pose();
+  QAngle get_angle();
 
 
   /**
@@ -73,13 +73,13 @@ public:
    * 
    * \param new_pos The angle at which the control arm will be
    */
-  void tare_pose(QAngle new_pose);
+  void tare_angle(QAngle new_pose);
 
   /**
    * Update the pose calculation.
    * Should always be run before acting on the tilter.
    */
-  void update_pose();
+  void update_angle();
 
 private:
 

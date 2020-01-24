@@ -17,12 +17,7 @@ namespace subsystems {
       updater_task->notify_take(true, TIMEOUT_MAX) != NOTIFY_UPDATE_POSE
     ) pros::delay(1);
 
-    // poses
-    if (transmission->m_control_mutex.take(0)) {
-      chassis->update_pose();
-      tilter->update_pose();
-      transmission->m_control_mutex.give();
-    }
+    update_poses();
 
     // wait for controller update notification if in opcontrol
     while (
@@ -31,11 +26,7 @@ namespace subsystems {
       updater_task->notify_take(true, TIMEOUT_MAX) != NOTIFY_UPDATE_CONT
     ) pros::delay(1);
 
-    // controllers
-    if (transmission->m_control_mutex.take(0)) {
-      transmission->update();
-      transmission->m_control_mutex.give();
-    }
+    update_controllers();
 
     pros::delay(10);
   });
@@ -58,6 +49,9 @@ namespace subsystems {
   // tilter
   std::shared_ptr<Tilter> tilter = std::make_shared<Tilter>(transmission);
 
+  // intake
+  std::shared_ptr<Intake> intake = std::make_shared<Intake>(0, 0);
+
   // initialize
   void init() {
     transmission->set_chassis(chassis);
@@ -66,12 +60,28 @@ namespace subsystems {
 
   // update poses
   void update_poses() {
-    chassis->update_pose();
-    tilter->update_pose();
+
+    // transmission
+    if (transmission->m_control_mutex.take(0)) {
+      chassis->update_pose();
+      tilter->update_angle();
+      transmission->m_control_mutex.give();
+    }
+
+    // intake
+    if (intake->m_control_mutex.take(0)) {
+      intake->update_angles();
+      intake->m_control_mutex.give();
+    }
   }
 
   // update controllers
   void update_controllers() {
-    transmission->update();
+
+    // transmission
+    if (transmission->m_control_mutex.take(0)) {
+      transmission->update();
+      transmission->m_control_mutex.give();
+    }
   }
 }
