@@ -4,6 +4,9 @@
 void opcontrol() {
   while(true) {
 
+    // update poses
+    
+
     pros::delay(10);
   }
 }

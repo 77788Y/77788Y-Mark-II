@@ -201,13 +201,13 @@ class Odom {
    * The current pose of the chassis.
    * Relative to m_reference_pose.
    */
-  std::unique_ptr<ChassisPose> m_pose;
+  std::shared_ptr<ChassisPose> m_pose;
 
   /**
    * The current derivative of the pose of the chassis.
    * Taring does not affect this value.
    */
-  std::unique_ptr<ChassisDeriv> m_deriv;
+  std::shared_ptr<ChassisDeriv> m_deriv;
 
   /**
    * Physical characteristics.

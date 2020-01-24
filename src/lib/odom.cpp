@@ -21,3 +21,18 @@ Odom::Odom(
   m_side_dist(side_dist),
   m_wheel_radius(wheel_radius)
 {}
+
+// update
+void Odom::update() {
+  // TODO: odom
+}
+
+// get pose
+Odom::ChassisPose* Odom::get_pose() {
+  return m_pose.get();
+}
+
+// get rate of change
+Odom::ChassisDeriv* Odom::get_speed() {
+  return m_deriv.get();
+}

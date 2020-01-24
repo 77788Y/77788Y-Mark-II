@@ -48,6 +48,13 @@ class Transmission {
   std::shared_ptr<IntegratedEncoder> m_ime_right_shared;
 
   /**
+   * Control mutex.
+   * Take this when controlling the transmission.
+   * You must update the pose and internal controller manualls if taken.
+   */
+  pros::Mutex control_mutex;
+
+  /**
    * Set the internal chassis reference.
    *
    * \param chassis
@@ -62,6 +69,11 @@ class Transmission {
    *        A reference to the tilter
    */
   void set_tilter(std::shared_ptr<Tilter> tilter);
+
+  /**
+   * Update the internal controller and state manager.
+   */
+  void update();
 
 private:
 
@@ -120,9 +132,4 @@ private:
    * Used to hold tilter in place when in HOLD state.
    */
   IterativePosPIDController m_hold_controller;
-
-  /**
-   * Update the internal controller and state manager.
-   */
-  void update();
 };
