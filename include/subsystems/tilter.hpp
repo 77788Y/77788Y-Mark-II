@@ -13,7 +13,7 @@ public:
   /**
    * Constructor.
    */
-  Tilter(std::unique_ptr<Transmission> transmission);
+  Tilter(std::shared_ptr<Transmission> transmission);
 
   /**
    * Set the voltage of both motors.
@@ -86,7 +86,7 @@ private:
   /**
    * The Transmission that this Tilter object interacts with.
    */
-  std::unique_ptr<Transmission> m_transmission;
+  std::shared_ptr<Transmission> m_transmission;
 
   /**
    * The reference pose.

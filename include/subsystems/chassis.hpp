@@ -17,7 +17,7 @@ public:
   /**
    * Constructor.
    */
-  Chassis(std::unique_ptr<Transmission> transmission, std::unique_ptr<Odom> odom);
+  Chassis(std::shared_ptr<Transmission> transmission, std::unique_ptr<Odom> odom);
 
   /**
    * Set the chassis motors to specified voltages.
@@ -75,7 +75,7 @@ private:
   /**
    * A reference to the Transmission this Chassis controls.
    */
-  std::unique_ptr<Transmission> m_transmission;
+  std::shared_ptr<Transmission> m_transmission;
 
   /**
    * A reference to the Odom that controls this Chassis' pose.

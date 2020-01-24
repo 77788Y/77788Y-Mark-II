@@ -39,13 +39,37 @@ class Transmission {
    */
   Transmission(int8_t motor_left_direct, int8_t motor_right_direct, int8_t motor_left_shared, int8_t motor_right_shared);
 
+  /**
+   * IMEs associated with each motor.
+   */
+  std::shared_ptr<IntegratedEncoder> m_ime_left_direct;
+  std::shared_ptr<IntegratedEncoder> m_ime_right_direct;
+  std::shared_ptr<IntegratedEncoder> m_ime_left_shared;
+  std::shared_ptr<IntegratedEncoder> m_ime_right_shared;
+
+  /**
+   * Set the internal chassis reference.
+   *
+   * \param chassis
+   *        A reference to the chassis
+   */
+  void set_chassis(std::shared_ptr<Chassis> chassis);
+
+  /**
+   * Set the internal tilter reference.
+   *
+   * \param tilter
+   *        A reference to the tilter
+   */
+  void set_tilter(std::shared_ptr<Tilter> tilter);
+
 private:
 
   /**
    * Chassis and Tilter objects associated with this Transmission.
    */
-  const std::shared_ptr<Chassis> m_chassis;
-  const std::shared_ptr<Tilter> m_tilter;
+  std::shared_ptr<Chassis> m_chassis;
+  std::shared_ptr<Tilter> m_tilter;
 
   /**
    * Motors associated with the transmission.
@@ -54,14 +78,6 @@ private:
   const std::unique_ptr<Motor> m_motor_right_direct; ///< The direct motor on the right of the chassis
   const std::unique_ptr<Motor> m_motor_left_shared;  ///< The shared motor on the left of the chassis
   const std::unique_ptr<Motor> m_motor_right_shared; ///< The shared motor on the right of the chassis
-
-  /**
-   * IMEs associated with each motor.
-   */
-  std::shared_ptr<IntegratedEncoder> m_ime_left_direct;
-  std::shared_ptr<IntegratedEncoder> m_ime_right_direct;
-  std::shared_ptr<IntegratedEncoder> m_ime_left_shared;
-  std::shared_ptr<IntegratedEncoder> m_ime_right_shared;
 
   /**
    * Describe a way for the transmission to reconcile the chassis and tilter.

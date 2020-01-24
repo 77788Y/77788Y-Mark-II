@@ -2,8 +2,10 @@
 #include <memory>
 
 // constructor
-Tilter::Tilter(std::unique_ptr<Transmission> transmission):
-  m_transmission(std::move(transmission)), velmath(VelMath(VelMathFactory::create(360, 5_ms))) {}
+Tilter::Tilter(std::shared_ptr<Transmission> transmission):
+  m_transmission(std::move(transmission)), velmath(VelMath(VelMathFactory::create(360, 5_ms))) {
+    // m_transmission->m_tilter = std::make_shared<Tilter>(this);
+  }
 
 // move voltage
 void Tilter::move_voltage(int val) {

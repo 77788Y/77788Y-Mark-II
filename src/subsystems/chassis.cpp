@@ -1,8 +1,10 @@
 #include "subsystems/chassis.hpp"
 
 // constructor
-Chassis::Chassis(std::unique_ptr<Transmission> transmission, std::unique_ptr<Odom> odom):
-  m_transmission(std::move(transmission)), m_odom(std::move(odom)) {}
+Chassis::Chassis(std::shared_ptr<Transmission> transmission, std::unique_ptr<Odom> odom):
+  m_transmission(transmission), m_odom(std::move(odom)) {
+    // m_transmission->m_chassis = std::make_shared<Chassis>(this);
+  }
 
 // move voltage
 void Chassis::move_voltage(int l, int r) {

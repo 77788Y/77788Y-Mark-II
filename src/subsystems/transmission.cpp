@@ -31,7 +31,20 @@ Transmission::Transmission(
 
   // transmission holding controller
   m_hold_controller(IterativeControllerFactory::posPID(1, 0, 0))
-  {}
+{
+  m_hold_controller.setTarget(0);
+}
+
+
+// set chassis reference
+void Transmission::set_chassis(std::shared_ptr<Chassis> chassis) {
+  m_chassis = chassis;
+}
+
+// set tilter reference
+void Transmission::set_tilter(std::shared_ptr<Tilter> tilter) {
+    m_tilter = tilter;
+  }
   
 
 // set the state
