@@ -18,10 +18,10 @@ namespace subsystems {
     ) pros::delay(1);
 
     // poses
-    if (transmission->control_mutex.take(0)) {
+    if (transmission->m_control_mutex.take(0)) {
       chassis->update_pose();
       tilter->update_pose();
-      transmission->control_mutex.give();
+      transmission->m_control_mutex.give();
     }
 
     // wait for controller update notification if in opcontrol
@@ -32,9 +32,9 @@ namespace subsystems {
     ) pros::delay(1);
 
     // controllers
-    if (transmission->control_mutex.take(0)) {
+    if (transmission->m_control_mutex.take(0)) {
       transmission->update();
-      transmission->control_mutex.give();
+      transmission->m_control_mutex.give();
     }
 
     pros::delay(10);

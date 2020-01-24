@@ -52,7 +52,7 @@ class Transmission {
    * Take this when controlling the transmission.
    * You must update the pose and internal controller manualls if taken.
    */
-  pros::Mutex control_mutex;
+  pros::Mutex m_control_mutex;
 
   /**
    * Set the internal chassis reference.
