@@ -8,7 +8,7 @@ void opcontrol() {
   while(true) {
 
     // update poses
-    notify_updater(NOTIFY_UPDATE_POSE);
+    update_poses();
 
     // control transmission
     if (transmission->m_control_mutex.take(0)) {
@@ -30,6 +30,13 @@ void opcontrol() {
     else if (controls::btn_intake_out.isPressed()) intake->move_voltage(-12000);
     else intake->lock();
 
+    // control lift
+    if (controls::btn_lift_up.isPressed()) lift->move_voltage(12000);
+    else if (controls::btn_lift_down.isPressed()) lift->move_voltage(-12000);
+    else lift->lock();
+
+    // update controllers
+    update_controllers();
 
     pros::delay(10);
   }

@@ -8,31 +8,10 @@ namespace subsystems {
   }
 
   // updater task
-  std::shared_ptr<pros::Task> updater_task = std::make_shared<pros::Task>([]() {
-
-    // wait for pose update notification if in opcontrol
-    while (
-      !(pros::competition::get_status() << COMPETITION_AUTONOMOUS) &&
-      !(pros::competition::get_status() << COMPETITION_DISABLED) &&
-      updater_task->notify_take(true, TIMEOUT_MAX) != NOTIFY_UPDATE_POSE
-    ) pros::delay(1);
-
-    update_poses();
-
-    // wait for controller update notification if in opcontrol
-    while (
-      !(pros::competition::get_status() << COMPETITION_AUTONOMOUS) &&
-      !(pros::competition::get_status() << COMPETITION_DISABLED) &&
-      updater_task->notify_take(true, TIMEOUT_MAX) != NOTIFY_UPDATE_CONT
-    ) pros::delay(1);
-
-    update_controllers();
-
-    pros::delay(10);
-  });
+  std::shared_ptr<pros::Task> updater_task;
 
   // transmission
-  std::shared_ptr<Transmission> transmission = std::make_shared<Transmission>(0, 0, 0, 0);
+  std::shared_ptr<Transmission> transmission = std::make_shared<Transmission>(11, 20, 15, 16);
   auto odom = std::make_unique<Odom>(
     std::make_unique<ADIEncoder>('A', 'B', false),
     std::make_unique<ADIEncoder>('E', 'F', false),
@@ -50,12 +29,24 @@ namespace subsystems {
   std::shared_ptr<Tilter> tilter = std::make_shared<Tilter>(transmission);
 
   // intake
-  std::shared_ptr<Intake> intake = std::make_shared<Intake>(0, 0);
+  std::shared_ptr<Intake> intake = std::make_shared<Intake>(13, 19);
+
+  // lift
+  std::shared_ptr<Lift> lift = std::make_shared<Lift>(1, 10);
 
   // initialize
   void init() {
     transmission->set_chassis(chassis);
     transmission->set_tilter(tilter);
+    transmission->set_lift(lift);
+    updater_task = std::make_shared<pros::Task>([]() {
+      while (true) {
+
+        update_poses();
+        update_controllers();
+        pros::delay(10);
+      }
+    });
   }
 
   // update poses
@@ -72,6 +63,12 @@ namespace subsystems {
     if (intake->m_control_mutex.take(0)) {
       intake->update_angles();
       intake->m_control_mutex.give();
+    }
+
+    // lift
+    if (lift->m_control_mutex.take(0)) {
+      lift->update_angles();
+      lift->m_control_mutex.give();
     }
   }
 

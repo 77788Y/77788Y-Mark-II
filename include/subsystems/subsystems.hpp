@@ -4,6 +4,7 @@
 #include "subsystems/transmission.hpp"
 #include "subsystems/tilter.hpp"
 #include "subsystems/intake.hpp"
+#include "subsystems/lift.hpp"
 
 namespace subsystems {
 
@@ -43,6 +44,7 @@ namespace subsystems {
   extern std::shared_ptr<Chassis> chassis; ///< Chassis object
   extern std::shared_ptr<Tilter>  tilter;  ///< Tilter object
   extern std::shared_ptr<Intake>  intake;  ///< Intake object
+  extern std::shared_ptr<Lift>    lift;    ///< Lift object
 
   /**
    * Initialize all subsystems.

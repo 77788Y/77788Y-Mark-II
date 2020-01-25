@@ -5,6 +5,7 @@
 
 class Chassis;
 class Tilter;
+class Lift;
 
 /**
  * The controller of the transmission.
@@ -15,6 +16,7 @@ class Transmission {
 
   friend class Chassis;
   friend class Tilter;
+  friend class Lift;
 
   public:
 
@@ -22,8 +24,8 @@ class Transmission {
   /**
    * Globals.
    */
-  static constexpr QAngle TILTER_RETRACT_THRESHOLD = 5_deg; ///< Tilter is considered retracted when behind this value.
-  static constexpr QAngle TILTER_EXTEND_THRESHOLD = 5_deg;  ///< Tilter is considered extended when in front of this value.
+  static constexpr QAngle TILTER_RETRACT_THRESHOLD = 15_deg; ///< Tilter is considered retracted when behind this value.
+  static constexpr QAngle TILTER_EXTEND_THRESHOLD = 60_deg;  ///< Tilter is considered extended when in front of this value.
   static constexpr double TILTER_HOLD_STRENGTH = 4000;      ///< This is the maximum voltage that will be applied to correct the tilter.
 
   /**
@@ -71,6 +73,14 @@ class Transmission {
   void set_tilter(std::shared_ptr<Tilter> tilter);
 
   /**
+   * Set the internal tilter reference.
+   *
+   * \param tilter
+   *        A reference to the tilter
+   */
+  void set_lift(std::shared_ptr<Lift> lift);
+
+  /**
    * Update the internal controller and state manager.
    */
   void update();
@@ -82,6 +92,7 @@ private:
    */
   std::shared_ptr<Chassis> m_chassis;
   std::shared_ptr<Tilter> m_tilter;
+  std::shared_ptr<Lift> m_lift;
 
   /**
    * Motors associated with the transmission.
