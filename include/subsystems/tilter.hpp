@@ -10,6 +10,8 @@ class Tilter {
 
 public:
 
+static constexpr QAngle MAX_EXTENDED = 90_deg;
+
   /**
    * Constructor.
    */
@@ -23,6 +25,14 @@ public:
    *        The desired voltage
    */
   void move_voltage(int val);
+
+
+  /**
+   * Hold the tray.
+   * This will relieve all current controllers (EXTENDING, RETRACTING, LOCKED_PASSTHROUGH).
+   * Will switch to HOLDING state unless locked, in which case the transmission will automatically switch to PASSIVE.
+   */
+  void hold(int bias = 0);
 
 
   /**

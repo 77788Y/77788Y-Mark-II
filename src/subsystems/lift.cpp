@@ -12,8 +12,8 @@ Lift::Lift(int8_t port_l, int8_t port_r):
 void Lift::move_voltage(int val) {
   m_motor_left ->setBrakeMode(Motor::brakeMode::coast);
   m_motor_right->setBrakeMode(Motor::brakeMode::coast);
-  m_motor_left ->moveVoltage(val);
-  m_motor_right->moveVoltage(val);
+  m_motor_left ->moveVoltage(val + (m_motor_right->getPosition() - m_motor_left->getPosition()) * 20);
+  m_motor_right->moveVoltage(val - (m_motor_right->getPosition() - m_motor_left->getPosition()) * 20);
 }
 
 // lock motors

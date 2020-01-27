@@ -11,9 +11,11 @@ namespace controls {
   inline ControllerButton btn_chassis_brake(ControllerDigital::left);
 
   // tilter
-  inline ControllerButton btn_tilter_macro_deposit(ControllerDigital::A);
+  inline ControllerButton btn_tilter_macro_deposit(ControllerDigital::Y);
   inline ControllerButton btn_tilter_extend(ControllerDigital::X);
-  inline ControllerButton btn_tilter_retract(ControllerDigital::Y);
+  inline ControllerButton btn_tilter_retract(ControllerDigital::B);
+  inline ControllerButton btn_tilter_pull_out(ControllerDigital::A);
+  inline ControllerButton btn_tilter_slow(ControllerDigital::up);
 
   // intake
   inline ControllerButton btn_intake_in (ControllerDigital::R1);

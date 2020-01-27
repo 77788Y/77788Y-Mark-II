@@ -9,6 +9,7 @@ class Lift {
 public:
 
   static constexpr QAngle MAX_LOCK = 20_deg;
+  static constexpr QAngle MAX_ANGLE = 80_deg;
 
   /**
    * Constructor.

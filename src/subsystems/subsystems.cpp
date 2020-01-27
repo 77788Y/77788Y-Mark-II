@@ -13,9 +13,9 @@ namespace subsystems {
   // transmission
   std::shared_ptr<Transmission> transmission = std::make_shared<Transmission>(11, 20, 15, 16);
   auto odom = std::make_unique<Odom>(
-    std::make_unique<ADIEncoder>('A', 'B', false),
-    std::make_unique<ADIEncoder>('E', 'F', false),
     std::make_unique<ADIEncoder>('G', 'H', false),
+    std::make_unique<ADIEncoder>('C', 'D', false),
+    std::make_unique<ADIEncoder>('E', 'F', false),
     transmission->m_ime_left_direct,
     transmission->m_ime_right_direct,
     nullptr,
@@ -29,10 +29,10 @@ namespace subsystems {
   std::shared_ptr<Tilter> tilter = std::make_shared<Tilter>(transmission);
 
   // intake
-  std::shared_ptr<Intake> intake = std::make_shared<Intake>(13, 19);
+  std::shared_ptr<Intake> intake = std::make_shared<Intake>(12, 19);
 
   // lift
-  std::shared_ptr<Lift> lift = std::make_shared<Lift>(1, 10);
+  std::shared_ptr<Lift> lift = std::make_shared<Lift>(1, 18);
 
   // initialize
   void init() {

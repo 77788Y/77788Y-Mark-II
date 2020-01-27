@@ -3,15 +3,20 @@
 
 // constructor
 Tilter::Tilter(std::shared_ptr<Transmission> transmission):
-  m_transmission(std::move(transmission)), velmath(VelMath(VelMathFactory::create(360, 5_ms))), m_pose(0_deg) {
-    // m_transmission->m_tilter = std::make_shared<Tilter>(this);
-    // std::cout << m_pose.convert(degree) << std::endl;
-  }
+  m_transmission(std::move(transmission)), velmath(VelMath(VelMathFactory::create(360, 5_ms))), m_pose(0_deg) 
+{}
 
 // move voltage
 void Tilter::move_voltage(int val) {
   m_transmission->m_state = Transmission::State::LOCKED_PASSTHROUGH;
   m_transmission->m_desired_tilter_voltage = val;
+}
+
+// hold the tray
+void Tilter::hold(int bias) {
+  m_transmission->m_bias = bias;
+  m_transmission->m_hold_controller.setTarget(get_angle().convert(degree));
+  m_transmission->m_state = Transmission::State::HOLDING;
 }
 
 // extend/retract tray

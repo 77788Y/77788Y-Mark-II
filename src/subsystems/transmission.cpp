@@ -32,7 +32,7 @@ Transmission::Transmission(
   m_desired_tilter_voltage(0),
 
   // transmission holding controller
-  m_hold_controller(IterativeControllerFactory::posPID(1, 0, 0))
+  m_hold_controller(IterativeControllerFactory::posPID(.1, 0, 0))
 {
   m_hold_controller.setTarget(0);
 }
@@ -61,22 +61,26 @@ void Transmission::set_state(State state) {
 // update the controllers
 void Transmission::update() {
 
-  std::cout << (m_tilter->get_angle()).convert(degree) << std::endl;
-
   // update state
   if (m_state == State::RETRACTING && (m_tilter->get_angle() <= TILTER_RETRACT_THRESHOLD || std::get<2>(m_lift->get_angle()) < Lift::MAX_LOCK)) {
+    m_bias = 0;
     m_state = State::HOLDING;
     m_hold_controller.setTarget(0);
   }
   if (m_state == State::EXTENDING  && (m_tilter->get_angle() >= TILTER_EXTEND_THRESHOLD || std::get<2>(m_lift->get_angle()) < Lift::MAX_LOCK)) {
+    m_bias = 0;
     m_state = State::HOLDING;
     m_hold_controller.setTarget(TILTER_RETRACT_THRESHOLD.convert(degree));
   }
-  if (m_state == State::HOLDING && m_tilter->get_angle() <= TILTER_RETRACT_THRESHOLD && std::get<2>(m_lift->get_angle()) < Lift::MAX_LOCK) m_state = State::PASSIVE;
-  if (m_state == State::PASSIVE && std::get<2>(m_lift->get_angle()) >= Lift::MAX_LOCK) m_state = State::HOLDING;
+  if (m_state == State::HOLDING && m_tilter->get_angle() <= TILTER_RETRACT_THRESHOLD && std::get<2>(m_lift->get_angle()) > Lift::MAX_LOCK) m_state = State::PASSIVE;
+  if (m_state == State::PASSIVE && std::get<2>(m_lift->get_angle()) <= Lift::MAX_LOCK) {
+    m_bias = 0;
+    m_state = State::HOLDING;
+    m_hold_controller.setTarget(0);
+  }
 
   // update motors
-  switch (m_state) {
+  switch (State::PASSIVE) {
 
     case (State::PASSIVE): 
       m_motor_left_direct->setBrakeMode(Motor::brakeMode::coast);
@@ -116,12 +120,12 @@ void Transmission::update() {
 
     case (State::HOLDING): {
       double correct = m_hold_controller.step(m_tilter->get_angle().convert(degree));
-      int shared_voltage_left =  m_desired_chassis_voltage_left  + correct * TILTER_HOLD_STRENGTH;
-      int shared_voltage_right = m_desired_chassis_voltage_right - correct * TILTER_HOLD_STRENGTH;
+      int shared_voltage_left =  m_desired_chassis_voltage_left  - correct * TILTER_HOLD_STRENGTH + m_bias;
+      int shared_voltage_right = m_desired_chassis_voltage_right - correct * TILTER_HOLD_STRENGTH + m_bias;
 
       double scale = 1;
-      if (std::abs(shared_voltage_left) > 12000 || std::abs(shared_voltage_right) > 12000) 
-        scale = std::min(12000.0 / std::abs(shared_voltage_left), 12000.0 / std::abs(shared_voltage_right));
+      // if (std::abs(shared_voltage_left) > 12000 || std::abs(shared_voltage_right) > 12000) 
+      //   scale = std::min(12000.0 / std::abs(shared_voltage_left), 12000.0 / std::abs(shared_voltage_right));
       
       m_motor_left_direct->setBrakeMode(Motor::brakeMode::coast);
       m_motor_right_direct->setBrakeMode(Motor::brakeMode::coast);
@@ -129,6 +133,6 @@ void Transmission::update() {
       m_motor_right_direct->moveVoltage(m_desired_chassis_voltage_right * scale);
       m_motor_left_shared->moveVoltage(shared_voltage_left * scale);
       m_motor_right_shared->moveVoltage(shared_voltage_right * scale);
-    }
+    } break;
   }
 }

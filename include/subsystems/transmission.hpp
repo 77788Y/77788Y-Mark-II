@@ -24,8 +24,8 @@ class Transmission {
   /**
    * Globals.
    */
-  static constexpr QAngle TILTER_RETRACT_THRESHOLD = 15_deg; ///< Tilter is considered retracted when behind this value.
-  static constexpr QAngle TILTER_EXTEND_THRESHOLD = 60_deg;  ///< Tilter is considered extended when in front of this value.
+  static constexpr QAngle TILTER_RETRACT_THRESHOLD = 3_deg; ///< Tilter is considered retracted when behind this value.
+  static constexpr QAngle TILTER_EXTEND_THRESHOLD = 85_deg;  ///< Tilter is considered extended when in front of this value.
   static constexpr double TILTER_HOLD_STRENGTH = 4000;      ///< This is the maximum voltage that will be applied to correct the tilter.
 
   /**
@@ -129,6 +129,11 @@ private:
    * Only used when in the LOCKED_PASSTHROUGH state.
    */
   int16_t m_desired_tilter_voltage;
+
+  /**
+   * Bias for the holding behavior.
+   */
+  int m_bias;
 
   /**
    * Set the desired state of the transmission.
